@@ -1,0 +1,117 @@
+/* ============ CTA SECTION ============ */
+.cta-section {
+    position: relative;
+    z-index: 2;
+    padding: 80px 0 120px;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* The glowing purple wave — sweeping up from the bottom,
+   identical to the cloud-wave in the reference */
+.cta-glow-wave {
+    position: absolute;
+    bottom: -60px;
+    left: -10%;
+    width: 120%;
+    height: 380px;
+    background:
+        radial-gradient(ellipse 70% 90% at 15% 100%, rgba(200, 130, 255, 0.72) 0%, rgba(140, 70, 230, 0.45) 36%, rgba(70, 30, 170, 0.1) 68%, transparent 84%),
+        radial-gradient(ellipse 55% 78% at 85% 100%, rgba(130, 190, 255, 0.65) 0%, rgba(80, 130, 230, 0.4) 40%, rgba(40, 50, 150, 0.12) 68%, transparent 86%),
+        radial-gradient(ellipse 55% 70% at 50% 108%, rgba(160, 110, 255, 0.68) 0%, rgba(110, 65, 220, 0.44) 46%, rgba(50, 28, 130, 0.12) 72%, transparent 90%);
+    filter: blur(36px);
+    border-radius: 50%;
+    opacity: 0.92;
+    pointer-events: none;
+}
+
+.cta-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.cta-heading {
+    font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.cta-sub {
+    font-size: 0.92rem;
+    color: rgba(210, 195, 255, 0.72);
+    margin-bottom: 36px;
+}
+
+.cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* Sign Up Now — vibrant blue to purple */
+.cta-btn-primary {
+    padding: 14px 42px;
+    background: linear-gradient(135deg, #2b5bd6 0%, #6830a3 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.5), inset 0 -2px 4px rgba(0, 0, 0, 0.4), 0 6px 15px rgba(0, 0, 0, 0.3);
+    transition: filter 0.2s, transform 0.15s, box-shadow 0.15s;
+    min-width: 160px;
+    letter-spacing: 0.01em;
+}
+
+.cta-btn-primary:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cta-btn-primary:hover {
+    filter: brightness(1.15);
+}
+
+/* Log In — deep purple to warm pinkish purple */
+.cta-btn-ghost {
+    padding: 14px 42px;
+    background: linear-gradient(135deg, #361763 0%, #993380 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.5), inset 0 -2px 4px rgba(0, 0, 0, 0.3), 0 6px 15px rgba(0, 0, 0, 0.3);
+    transition: filter 0.2s, transform 0.15s, box-shadow 0.15s;
+    min-width: 160px;
+    letter-spacing: 0.01em;
+}
+
+.cta-btn-ghost:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cta-btn-ghost:hover {
+    filter: brightness(1.15);
+}
+
+@media (max-width: 480px) {
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cta-btn-primary,
+    .cta-btn-ghost {
+        width: 80vw;
+        max-width: 320px;
+    }
+}

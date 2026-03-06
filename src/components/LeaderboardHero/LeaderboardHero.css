@@ -1,0 +1,253 @@
+/* ============ LEADERBOARD HERO ============ */
+.lb-hero {
+    position: relative;
+    width: 100%;
+    padding-top: 40px;
+    overflow: visible;
+}
+
+/* Two-column layout inside container */
+.lb-hero-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2%;
+    min-height: 380px;
+    padding-bottom: 40px;
+}
+
+/* ── LEFT (50%) ── */
+.lb-hero-left {
+    flex: 0 0 50%;
+    max-width: 50%;
+    position: relative;
+    z-index: 2;
+}
+
+.lb-hero-heading {
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-bottom: 15px;
+    font-family: 'Outfit', sans-serif;
+}
+
+.lb-hero-sub {
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Outfit', sans-serif;
+}
+
+.lb-hero-text {
+    font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+    line-height: 1.6;
+    color: #a0aec0;
+    margin-bottom: 30px;
+    max-width: 440px;
+    font-weight: 400;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ── RIGHT (48%) ── */
+.lb-hero-right {
+    flex: 0 0 48%;
+    max-width: 48%;
+    position: relative;
+    height: 400px;
+}
+
+/* soft radial glow behind assets */
+.lb-hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    height: 85%;
+    background: radial-gradient(ellipse, rgba(180, 110, 255, 0.35) 0%, rgba(130, 40, 240, 0.15) 50%, transparent 80%);
+    border-radius: 50%;
+    filter: blur(45px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── Individual assets ── */
+.lb-hero-asset {
+    position: absolute;
+    object-fit: contain;
+}
+
+/* Girl character — central hero piece */
+.lb-ht-girl {
+    width: 60%;
+    bottom: -30px;
+    right: 15%;
+    z-index: 6;
+    filter: drop-shadow(0 15px 40px rgba(60, 30, 140, 0.5));
+    animation: floatLBGirl 5.5s ease-in-out infinite;
+}
+
+/* Bulb */
+.lb-ht-bulb {
+    width: 20%;
+    top: 10%;
+    left: 10%;
+    z-index: 8;
+    filter: drop-shadow(0 10px 25px rgba(255, 220, 50, 0.6));
+    rotate: -15deg;
+}
+
+/* Clipboard */
+.lb-ht-clipboard {
+    width: 22%;
+    top: 35%;
+    left: -2%;
+    z-index: 9;
+    filter: drop-shadow(0 5px 15px rgba(200, 200, 240, 0.4));
+    rotate: -10deg;
+}
+
+/* Planet */
+.lb-ht-planet {
+    width: 20%;
+    top: 5%;
+    right: 5%;
+    z-index: 3;
+    filter: drop-shadow(0 6px 15px rgba(80, 140, 255, 0.5));
+    rotate: 20deg;
+}
+
+/* Target */
+.lb-ht-target {
+    width: 25%;
+    bottom: 20%;
+    right: 5%;
+    z-index: 4;
+    filter: drop-shadow(0 8px 20px rgba(250, 80, 80, 0.5));
+    rotate: 15deg;
+}
+
+/* Stars */
+.lb-ht-star-1 {
+    width: 14%;
+    top: -5%;
+    left: 35%;
+    z-index: 10;
+    filter: drop-shadow(0 5px 15px rgba(255, 255, 100, 0.6));
+    rotate: -15deg;
+}
+
+/* Cloud — IN FRONT to cover cutoffs */
+.lb-ht-cloud {
+    width: 140%;
+    height: 38%;
+    bottom: -15%;
+    left: 55%;
+    transform: translateX(-50%);
+    z-index: 12;
+    opacity: 1;
+    pointer-events: none;
+    object-fit: cover;
+    object-position: center 30%;
+    filter: brightness(1.2) saturate(1.2) contrast(1.05);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 70%, transparent 100%);
+}
+
+/* UNIQUE TIMING ANIMATIONS */
+@keyframes floatLBGirl {
+
+    0%,
+    100% {
+        translate: 0px 0px;
+    }
+
+    50% {
+        translate: 0px -12px;
+    }
+}
+
+@keyframes floatLBSlow {
+
+    0%,
+    100% {
+        translate: 0px 0px;
+    }
+
+    50% {
+        translate: 0px -8px;
+    }
+}
+
+.float-slow {
+    animation: floatLBSlow 6s ease-in-out infinite;
+}
+
+.float-medium {
+    animation: floatLBSlow 4.5s ease-in-out infinite;
+    animation-delay: -1s;
+}
+
+.float-fast {
+    animation: floatLBSlow 3s ease-in-out infinite;
+    animation-delay: -2s;
+}
+
+@media (max-width: 900px) {
+    .lb-hero-inner {
+        flex-direction: column;
+        padding-bottom: 0px;
+        min-height: auto;
+        gap: 20px;
+    }
+
+    .lb-hero-left,
+    .lb-hero-right {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .lb-hero-right {
+        height: 350px;
+        margin-top: 20px;
+    }
+
+    .lb-hero-left {
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .lb-hero-text {
+        margin: 0 auto 30px auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .lb-hero-right {
+        height: 280px;
+    }
+
+    .lb-ht-girl {
+        width: 65%;
+        right: 10%;
+        bottom: -10px;
+    }
+
+    .lb-ht-bulb {
+        width: 22%;
+        left: 0%;
+        top: 5%;
+    }
+
+    .lb-ht-cloud {
+        width: 170%;
+        bottom: -30px;
+        height: 45%;
+    }
+}
