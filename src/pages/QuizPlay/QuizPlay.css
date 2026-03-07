@@ -1,0 +1,614 @@
+/* =========================================================
+   QUIZ PLAY — matches existing site design language
+   ========================================================= */
+.qp-page {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 110px 20px 60px;
+}
+
+/* ── Loader ── */
+.qp-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    height: 100vh;
+}
+
+.qp-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(167, 139, 250, 0.8);
+    animation: qpDot 1.2s ease-in-out infinite;
+}
+
+.qp-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.qp-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes qpDot {
+
+    0%,
+    100% {
+        transform: scale(0.7);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+}
+
+/* ── Back link ── */
+.qp-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+}
+
+.qp-back svg {
+    width: 16px;
+    height: 16px;
+}
+
+.qp-back:hover {
+    color: #fff;
+}
+
+/* ── Shared CTA button (3D inset, matches cat-btn exactly) ── */
+.qp-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 32px;
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.25),
+        0 4px 14px rgba(0, 0, 0, 0.35);
+    letter-spacing: 0.02em;
+    transition: filter 0.2s, transform 0.15s, box-shadow 0.15s;
+}
+
+.qp-cta-btn:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+}
+
+.qp-cta-btn:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.qp-cta-btn:disabled {
+    filter: none;
+    transform: none;
+    cursor: not-allowed;
+}
+
+/* ── Ghost button ── */
+.qp-ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 28px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.qp-ghost-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.45);
+}
+
+/* =========================================================
+   INTRO / RESULTS shared layout
+   ========================================================= */
+.qp-intro-wrap {
+    width: 100%;
+    max-width: 680px;
+}
+
+/* Matches cat-card: gradient bg, border, shine, box-shadow */
+.qp-intro-card {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: stretch;
+    position: relative;
+    cursor: default;
+    transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+.qp-intro-card:hover {
+    box-shadow: 0 0 32px rgba(255, 255, 255, 0.22), inset 0 2px 8px rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Shine wipe — identical to premiumShineCat */
+.qp-intro-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-20deg);
+    z-index: 20;
+    pointer-events: none;
+}
+
+.qp-intro-card:hover .qp-intro-shine {
+    animation: qpShineWipe 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes qpShineWipe {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 200%;
+    }
+}
+
+/* Left image panel === cat-img-wrap */
+.qp-intro-left {
+    flex-shrink: 0;
+    width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    z-index: 5;
+}
+
+.qp-intro-img-wrap {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qp-intro-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5));
+}
+
+/* Right text === cat-footer (dark bg version since no white here) */
+.qp-intro-right {
+    flex: 1;
+    padding: 28px 28px 28px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 5;
+}
+
+.qp-intro-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: -0.015em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.qp-intro-desc {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.5;
+    margin-bottom: 14px;
+}
+
+.qp-intro-meta {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.qp-intro-meta span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+}
+
+.qp-diff-badge {
+    text-transform: capitalize;
+}
+
+/* White footer panel === cat-footer */
+.qp-intro-footer {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 230, 255, 0.88));
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.qp-intro-footer-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a0b2e;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* ── Results special footer ── */
+.qp-results-footer {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.qp-score-display {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.qp-score-num {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #1a0b2e;
+    line-height: 1;
+    font-family: 'Outfit', sans-serif;
+}
+
+.qp-score-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #5a4a7a;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.qp-results-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Error modal */
+.qp-modal {
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    max-width: 460px;
+    width: 100%;
+    background: rgba(15, 8, 35, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.qp-modal-icon {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.qp-modal h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.qp-modal p {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   PLAYING VIEW
+   ========================================================= */
+.qp-playing {
+    align-items: flex-start;
+}
+
+.qp-play-container {
+    padding-top: 0;
+}
+
+/* Progress row */
+.qp-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.qp-progress-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.qp-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #7b2cbf, #3d5afe);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px rgba(123, 44, 191, 0.5);
+}
+
+.qp-progress-lbl {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Question card — same DNA as cat-card / cd-qcard */
+.qp-qcard {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+    max-width: 800px;
+    margin: 0 auto;
+    transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+/* Header: gradient panel with question text */
+.qp-qcard-header {
+    padding: 32px 36px 28px;
+    position: relative;
+    overflow: hidden;
+}
+
+.qp-qcard-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: skewX(-20deg);
+    z-index: 2;
+    pointer-events: none;
+    animation: qpHdShine 5s ease-in-out 0.5s infinite;
+}
+
+@keyframes qpHdShine {
+    0% {
+        left: -100%;
+    }
+
+    30%,
+    100% {
+        left: 200%;
+    }
+}
+
+.qp-q-num {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 5;
+}
+
+.qp-q-text {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: #fff;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 5;
+}
+
+/* Body: white panel (like cat-footer) */
+.qp-qcard-body {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(240, 230, 255, 0.90));
+    padding: 28px 36px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Options grid */
+.qp-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.qp-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    background: rgba(26, 11, 46, 0.06);
+    border: 2px solid rgba(100, 60, 160, 0.15);
+    border-radius: 10px;
+    color: #1a0b2e;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.qp-option:hover {
+    background: rgba(100, 60, 160, 0.1);
+    border-color: rgba(100, 60, 160, 0.4);
+    transform: translateY(-2px);
+}
+
+.qp-option.selected {
+    background: rgba(74, 0, 224, 0.12);
+    border-color: #4a00e0;
+    box-shadow: 0 4px 14px rgba(74, 0, 224, 0.2);
+    transform: translateY(-2px);
+}
+
+.qp-opt-letter {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: rgba(26, 11, 46, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #5a4a7a;
+    transition: background 0.2s, color 0.2s;
+}
+
+.qp-option.selected .qp-opt-letter {
+    background: #4a00e0;
+    color: #fff;
+}
+
+.qp-opt-text {
+    flex: 1;
+}
+
+/* Footer row */
+.qp-qcard-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(26, 11, 46, 0.1);
+}
+
+.qp-skip {
+    font-size: 0.88rem;
+    color: rgba(26, 11, 46, 0.35);
+    cursor: pointer;
+    transition: color 0.2s;
+    font-weight: 500;
+    user-select: none;
+}
+
+.qp-skip:hover {
+    color: rgba(26, 11, 46, 0.65);
+}
+
+/* ── Fade in ── */
+.fade-in {
+    opacity: 0;
+    animation: qpFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes qpFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .qp-intro-card {
+        flex-direction: column;
+    }
+
+    .qp-intro-left {
+        width: 100%;
+        padding: 24px 24px 0;
+    }
+
+    .qp-intro-right {
+        padding: 16px 24px 24px;
+    }
+
+    .qp-intro-footer {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .qp-options {
+        grid-template-columns: 1fr;
+    }
+
+    .qp-qcard-header {
+        padding: 24px 20px 20px;
+    }
+
+    .qp-qcard-body {
+        padding: 20px;
+    }
+
+    .qp-results-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}

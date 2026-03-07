@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './CategoriesPage.css';
 
 const ALL_CATEGORIES = [
@@ -19,6 +20,28 @@ const ALL_CATEGORIES = [
 export default function CategoriesPage() {
     const [activeTab, setActiveTab] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/categories');
+                const data = await response.json();
+                setCategories(data.categories || []);
+            } catch (err) {
+                console.error("Failed to load categories", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    const filteredCategories = categories.filter(cat =>
+        cat.label.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div className="categories-page">
@@ -78,15 +101,17 @@ export default function CategoriesPage() {
 
                 {/* ── GRID SECTION ── */}
                 <div className="cp-grid">
-                    {ALL_CATEGORIES.map(({ id, key, image, label }) => (
-                        <div className={`cp-card fade-in cp-${key}`} style={{ animationDelay: `${id * 0.05}s` }} key={id}>
+                    {loading ? (
+                        <div className="page-loader" style={{ gridColumn: "1 / -1" }}>Loading topics...</div>
+                    ) : filteredCategories.map((cat, i) => (
+                        <div className={`cp-card fade-in cp-${cat.key}`} style={{ animationDelay: `${i * 0.05}s` }} key={cat._id}>
                             <div className="cp-card-inner">
                                 <div className="cp-img-wrap">
-                                    <img src={image} alt={label} className="cp-img" />
+                                    <img src={`/landing_page-assets/cat_${cat.key}.png`} onError={(e) => { e.target.onerror = null; e.target.src = '/landing_page-assets/cat_general.png'; }} alt={cat.label} className="cp-img" />
                                 </div>
                                 <div className="cp-footer">
-                                    <h3 className="cp-label">{label}</h3>
-                                    <button className="cp-btn">Play Now</button>
+                                    <h3 className="cp-label">{cat.label}</h3>
+                                    <Link to={`/categories/${cat.key}`} className="cp-btn">Explore Topics</Link>
                                 </div>
                             </div>
                         </div>

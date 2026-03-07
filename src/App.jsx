@@ -6,6 +6,8 @@ import Home from './pages/Home/Home';
 import Leaderboard from './pages/Leaderboard/Leaderboard';
 import About from './pages/About/About';
 import CategoriesPage from './pages/Categories/CategoriesPage';
+import CategoryDetail from './pages/CategoryDetail/CategoryDetail';
+import QuizPlay from './pages/QuizPlay/QuizPlay';
 import Footer from './components/Footer/Footer';
 
 /* ── Seeded star field so stars don't re-randomise on render ── */
@@ -58,6 +60,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/categories/:categoryId" element={<CategoryDetail />} />
+          <Route path="/play/:quizId" element={<QuizPlay />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/about" element={<About />} />
         </Routes>

@@ -1,0 +1,740 @@
+/* =========================================================
+   CATEGORY DETAIL — exactly matches site design language
+   ========================================================= */
+
+.cd-page {
+    position: relative;
+    z-index: 10;
+    padding-top: 100px;
+    padding-bottom: 80px;
+    min-height: 100vh;
+    color: #fff;
+}
+
+/* ── Loader ── */
+.cd-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    height: 100vh;
+}
+
+.cd-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(167, 139, 250, 0.8);
+    animation: dotPop 1.2s ease-in-out infinite;
+}
+
+.cd-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.cd-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dotPop {
+
+    0%,
+    100% {
+        transform: scale(0.7);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+}
+
+/* ── Back link ── */
+.cd-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+}
+
+.cd-back svg {
+    width: 16px;
+    height: 16px;
+}
+
+.cd-back:hover {
+    color: #fff;
+}
+
+/* ─── HERO BANNER — full-bleed background image with text overlay ─── */
+.cd-hero {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+    margin-bottom: 30px;
+    min-height: 220px;
+    /* gradient fallback while image loads */
+    background: #1a2a4a;
+}
+
+/* Full-bleed background image */
+.cd-hero-img-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.cd-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    /* slight zoom-in to avoid hard edges */
+    transform: scale(1.04);
+}
+
+/* Dark gradient overlay — left side darker so text pops, right side reveals image */
+.cd-hero-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg,
+            rgba(8, 4, 28, 0.82) 0%,
+            rgba(8, 4, 28, 0.60) 50%,
+            rgba(8, 4, 28, 0.25) 100%),
+        linear-gradient(180deg,
+            rgba(8, 4, 28, 0.15) 0%,
+            rgba(8, 4, 28, 0.45) 100%);
+}
+
+/* Shine wipe sits above overlay */
+.cd-hero-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    transform: skewX(-20deg);
+    animation: heroShine 4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 5;
+}
+
+@keyframes heroShine {
+    0% {
+        left: -100%;
+    }
+
+    35%,
+    100% {
+        left: 200%;
+    }
+}
+
+/* Text sits above everything */
+.cd-hero-text {
+    position: relative;
+    z-index: 6;
+    padding: 36px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 220px;
+    max-width: 640px;
+}
+
+.cd-hero-title {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 0, 0, 0.5);
+    line-height: 1.15;
+}
+
+.cd-hero-sub {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 520px;
+    line-height: 1.6;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+}
+
+
+/* ── Controls row ── */
+.cd-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+}
+
+.cd-search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 10px;
+    padding: 11px 16px;
+    flex: 0 0 280px;
+    box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.15);
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.cd-search-box:focus-within {
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.25), inset 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.cd-search-box svg {
+    width: 18px;
+    height: 18px;
+    color: rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
+}
+
+.cd-search-box input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.95rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    width: 100%;
+    outline: none;
+}
+
+.cd-search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Difficulty tabs — same style as cp-tabs */
+.cd-diff-tabs {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 10px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.cd-diff-tab {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: none;
+    padding: 9px 22px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.25s;
+}
+
+.cd-diff-tab:hover:not(.active) {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.cd-diff-tab.active {
+    background: linear-gradient(135deg, #7b2cbf 0%, #4a00e0 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(74, 0, 224, 0.4);
+}
+
+/* ── Two-column body ── */
+.cd-body {
+    display: grid;
+    grid-template-columns: 1fr 290px;
+    gap: 30px;
+    align-items: start;
+}
+
+/* ── Quiz list ── */
+.cd-quiz-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cd-empty {
+    padding: 50px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.45);
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    font-size: 1rem;
+}
+
+/* ─── QUIZ CARD — same DNA as cat-card ─── */
+.cd-qcard {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    position: relative;
+    background: #100a20;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cd-qcard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.22), inset 0 2px 8px rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Shine wipe — matches premiumShineCat exactly */
+.cd-qcard-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-20deg);
+    z-index: 20;
+    pointer-events: none;
+}
+
+.cd-qcard:hover .cd-qcard-shine {
+    animation: shineWipe 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes shineWipe {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 200%;
+    }
+}
+
+/* Icon panel === cat-img-wrap */
+.cd-qcard-icon {
+    flex-shrink: 0;
+    width: 120px;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    z-index: 5;
+    min-height: 100px;
+}
+
+.cd-qcard-icon-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+/* Info section === cat-footer (the white panel) */
+.cd-qcard-info {
+    flex: 1;
+    min-width: 0;
+    padding: 18px 22px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 230, 255, 0.88));
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    border-left: 1px solid rgba(255, 255, 255, 0.8);
+    position: relative;
+    z-index: 5;
+    align-self: stretch;
+}
+
+.cd-qcard-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1a0b2e;
+    font-family: 'Outfit', sans-serif;
+    /* Do NOT truncate — let it wrap to a second line if needed */
+    white-space: normal;
+    overflow: visible;
+    line-height: 1.3;
+}
+
+.cd-qcard-meta {
+    font-size: 0.82rem;
+    color: #5a4a7a;
+}
+
+.cd-qcard-diff-row {
+    font-size: 0.82rem;
+    color: #5a4a7a;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cd-diff-word {
+    font-weight: 700;
+}
+
+.cd-diff-easy {
+    color: #166534;
+}
+
+.cd-diff-medium {
+    color: #854d0e;
+}
+
+.cd-diff-hard {
+    color: #991b1b;
+}
+
+/* Stars — inline with diff row */
+.cd-stars {
+    display: inline-flex;
+    gap: 2px;
+}
+
+.cd-star {
+    width: 13px;
+    height: 13px;
+}
+
+.cd-star polygon {
+    stroke-width: 1;
+}
+
+.cd-star.on {
+    fill: #f59e0b;
+    stroke: #d97706;
+}
+
+.cd-star.off {
+    fill: none;
+    stroke: #c4b5d4;
+}
+
+/* Start Quiz button */
+.cd-start-btn {
+    flex-shrink: 0;
+    padding: 0 26px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.25), inset 0 -2px 4px rgba(0, 0, 0, 0.25);
+    transition: filter 0.2s, transform 0.15s;
+    white-space: nowrap;
+    position: relative;
+    z-index: 5;
+}
+
+.cd-start-btn:hover {
+    filter: brightness(1.15);
+}
+
+/* ── Sidebar ── */
+.cd-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: sticky;
+    top: 100px;
+}
+
+/* Sidebar card — glass panel matching the site's backdrop style */
+.cd-scard {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    background: rgba(15, 8, 35, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 22px;
+}
+
+.cd-scard-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.cd-scard-trophy {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.cd-scard-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: #fff;
+}
+
+.cd-scard-title span {
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Players */
+.cd-players {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.cd-player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cd-player:last-child {
+    border-bottom: none;
+}
+
+.cd-player-rank {
+    width: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.cd-player-av {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+}
+
+.cd-player-name {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.cd-player-pts {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Leaderboard button */
+.cd-lb-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.25), inset 0 -2px 4px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: filter 0.2s, transform 0.15s;
+}
+
+.cd-lb-btn:hover {
+    filter: brightness(1.15);
+}
+
+/* Promo card — uses category gradient */
+.cd-promo {
+    position: relative;
+    text-align: center;
+    padding: 28px 22px;
+}
+
+.cd-promo-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+    animation: promoShine 4s ease-in-out 1s infinite;
+}
+
+@keyframes promoShine {
+    0% {
+        left: -100%;
+    }
+
+    40%,
+    100% {
+        left: 200%;
+    }
+}
+
+.cd-promo-img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5));
+    margin-bottom: 12px;
+}
+
+.cd-promo-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.cd-promo-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.25), inset 0 -2px 4px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: filter 0.2s;
+}
+
+.cd-promo-btn:hover {
+    filter: brightness(1.15);
+}
+
+/* ── Fade in (matching CategoriesPage) ── */
+.fade-in {
+    opacity: 0;
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+    .cd-body {
+        grid-template-columns: 1fr;
+    }
+
+    .cd-sidebar {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .cd-scard {
+        flex: 1 1 260px;
+    }
+}
+
+@media (max-width: 640px) {
+    .cd-page {
+        padding-top: 80px;
+    }
+
+    .cd-hero {
+        min-height: 180px;
+    }
+
+    .cd-hero-text {
+        padding: 24px 22px;
+        min-height: 180px;
+        max-width: 100%;
+    }
+
+    /* img-wrap is absolute/full-bleed — no extra rules needed on mobile */
+
+
+    .cd-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cd-search-box {
+        flex: unset;
+        width: 100%;
+    }
+
+    .cd-diff-tabs {
+        align-self: stretch;
+        justify-content: center;
+    }
+
+    .cd-diff-tab {
+        flex: 1;
+        padding: 9px 8px;
+        font-size: 0.84rem;
+    }
+
+    .cd-qcard-info {
+        height: auto;
+        min-height: 90px;
+    }
+
+    .cd-qcard-title {
+        white-space: normal;
+    }
+
+    .cd-start-btn {
+        height: auto;
+        padding: 14px 20px;
+    }
+
+    .cd-sidebar {
+        flex-direction: column;
+    }
+}
