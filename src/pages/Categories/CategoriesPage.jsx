@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import AILoader from '../../components/AILoader/AILoader';
 import './CategoriesPage.css';
 
 const ALL_CATEGORIES = [
@@ -14,7 +16,7 @@ const ALL_CATEGORIES = [
     { id: 9, key: 'music', image: '/landing_page-assets/cat_history.png', label: 'Music' },
     { id: 10, key: 'sports', image: '/landing_page-assets/cat_sports_1772800427142.png', label: 'Sports' },
     { id: 11, key: 'art', image: '/landing_page-assets/cat_general.png', label: 'Art & Culture' },
-    { id: 12, key: 'gaming', image: '/landing_page-assets/cat_technology_1772800409924.png', label: 'Gaming' }
+    { id: 12, key: 'gaming', image: '/landing_page-assets/cat_technology_1772800409924.png', label: 'Gaming' },
 ];
 
 export default function CategoriesPage() {
@@ -22,51 +24,119 @@ export default function CategoriesPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [aiTopic, setAiTopic] = useState('');
+    const [aiDifficulty, setAiDifficulty] = useState('medium');
+    const [generatingAi, setGeneratingAi] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/categories');
-                const data = await response.json();
+                const res = await fetch('http://localhost:5000/api/categories');
+                const data = await res.json();
                 setCategories(data.categories || []);
-            } catch (err) {
-                console.error("Failed to load categories", err);
+            } catch {
+                setCategories(ALL_CATEGORIES);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchCategories();
     }, []);
 
-    const filteredCategories = categories.filter(cat =>
+    const display = categories.length > 0 ? categories : ALL_CATEGORIES;
+
+    const filteredCategories = display.filter(cat =>
         cat.label.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const handleGenerateAIQuiz = async () => {
+        if (!aiTopic.trim()) return;
+        setGeneratingAi(true);
+        try {
+            const generalCat = categories.find(c => c.key === 'general') || categories[0] || ALL_CATEGORIES[0];
+            const catId = generalCat._id || generalCat.id;
+
+            const res = await fetch('http://localhost:5000/api/ai/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    topic: aiTopic,
+                    categoryId: catId || '507f1f77bcf86cd799439011',
+                    difficulty: aiDifficulty
+                }),
+            });
+            const data = await res.json();
+            if (res.ok && data.quizId) {
+                toast.success('Quiz generated successfully!');
+                navigate(`/play/${data.quizId}`);
+            } else {
+                toast.error(data.message || 'Failed to generate quiz. Are you signed in?');
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error('Something went wrong generating the AI quiz.');
+        } finally {
+            setGeneratingAi(false);
+        }
+    };
+
     return (
         <div className="categories-page">
-            <div className="container">
-                {/* ── HEADER SECTION ── */}
-                <div className="cp-header">
-                    <h1 className="cp-heading">Choose Your Quiz Category!</h1>
-                    <p className="cp-sub">
-                        Explore thousands of fun and challenging quizzes across a variety of topics.
-                        Test your knowledge, earn points, and have a blast!
-                    </p>
+            {generatingAi && <AILoader />}
+
+            {/* ── CINEMATIC HERO BANNER ── */}
+            <section className="cp-hero">
+                <div className="container cp-hero-inner">
+
+                    {/* ── LEFT: Text content ── */}
+                    <div className="cp-hero-left">
+                        <h1 className="cp-hero-heading">
+                            Browse Our Diverse<br />
+                            Quiz Categories
+                        </h1>
+                        <p className="cp-hero-sub-bold">
+                            Discover new topics and test your knowledge across a wide range of subjects!
+                        </p>
+                        <hr className="cp-hero-divider" />
+                        <p className="cp-hero-sub">
+                            Explore our vast collection of quizzes and find the perfect challenge for you.
+                        </p>
+                    </div>
+
+                    {/* ── RIGHT: Visual composition ── */}
+                    <div className="cp-hero-right" aria-hidden="true">
+                        {/* Main Graphic */}
+                        <img
+                            src="/landing_page-assets/LeaderboardHeroImage.png"
+                            alt="Categories graphic"
+                            className="cp-hero-img-asset float-medium"
+                        />
+
+                        {/* Floating accent elements */}
+                        <img src="/landing_page-assets/star.png" alt="" className="cp-hero-float cp-hf-star1 float-slow" />
+                        <img src="/landing_page-assets/star.png" alt="" className="cp-hero-float cp-hf-star2 float-fast" />
+                        <img src="/landing_page-assets/Globe_compressed.webp" alt="" className="cp-hero-float cp-hf-globe float-slow" />
+                        <img src="/landing_page-assets/star_compressed.webp" alt="" className="cp-hero-float cp-hf-sparkle float-medium" />
+                    </div>
                 </div>
+            </section>
+
+            {/* ── PAGE CONTENT ── */}
+            <div className="container">
 
                 {/* ── CONTROLS: SEARCH & TABS ── */}
                 <div className="cp-controls">
                     <div className="cp-search">
                         <svg className="cp-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
                         <input
                             type="text"
                             placeholder="Search categories..."
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={e => setSearchQuery(e.target.value)}
                         />
                     </div>
 
@@ -83,15 +153,38 @@ export default function CategoriesPage() {
                     </div>
                 </div>
 
-
                 {/* ── AI QUIZ GENERATOR BANNER ── */}
                 <div className="ai-topic-banner">
                     <div className="ai-tb-content">
                         <h3>Create Your Own Topic</h3>
                         <p>Type any topic you want and our AI will instantly generate a custom quiz for you.</p>
                         <div className="ai-tb-input-group">
-                            <input type="text" placeholder="E.g., The History of Ancient Rome..." className="ai-tb-input" />
-                            <button className="ai-tb-btn">Generate AI Quiz</button>
+                            <input
+                                type="text"
+                                placeholder="E.g., The History of Ancient Rome..."
+                                className="ai-tb-input"
+                                value={aiTopic}
+                                onChange={(e) => setAiTopic(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleGenerateAIQuiz()}
+                            />
+                            <div className="ai-controls-row">
+                                <div className="ai-difficulty-selector">
+                                    <span className="ai-diff-label">Level:</span>
+                                    <select
+                                        className="ai-diff-select"
+                                        value={aiDifficulty}
+                                        onChange={(e) => setAiDifficulty(e.target.value)}
+                                    >
+                                        <option value="easy">Easy</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="hard">Hard</option>
+                                        <option value="master">Master</option>
+                                    </select>
+                                </div>
+                                <button className="ai-tb-btn" onClick={handleGenerateAIQuiz} disabled={generatingAi}>
+                                    {generatingAi ? 'Creating Magic...' : 'Generate AI Quiz'}
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div className="ai-tb-image">
@@ -102,12 +195,25 @@ export default function CategoriesPage() {
                 {/* ── GRID SECTION ── */}
                 <div className="cp-grid">
                     {loading ? (
-                        <div className="page-loader" style={{ gridColumn: "1 / -1" }}>Loading topics...</div>
+                        <div className="page-loader" style={{ gridColumn: '1 / -1' }}>Loading topics...</div>
                     ) : filteredCategories.map((cat, i) => (
-                        <div className={`cp-card fade-in cp-${cat.key}`} style={{ animationDelay: `${i * 0.05}s` }} key={cat._id}>
+                        <div
+                            className={`cp-card fade-in cp-${cat.key}`}
+                            style={{ animationDelay: `${i * 0.05}s` }}
+                            key={cat._id || cat.id}
+                        >
                             <div className="cp-card-inner">
                                 <div className="cp-img-wrap">
-                                    <img src={`/landing_page-assets/cat_${cat.key}.png`} onError={(e) => { e.target.onerror = null; e.target.src = '/landing_page-assets/cat_general.png'; }} alt={cat.label} className="cp-img" />
+                                    <img
+                                        src={
+                                            cat.image ||
+                                            ALL_CATEGORIES.find(c => c.key === cat.key)?.image ||
+                                            `/landing_page-assets/cat_${cat.key}.png`
+                                        }
+                                        onError={e => { e.target.onerror = null; e.target.src = '/landing_page-assets/cat_general.png'; }}
+                                        alt={cat.label}
+                                        className="cp-img"
+                                    />
                                 </div>
                                 <div className="cp-footer">
                                     <h3 className="cp-label">{cat.label}</h3>

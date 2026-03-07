@@ -9,6 +9,9 @@ import CategoriesPage from './pages/Categories/CategoriesPage';
 import CategoryDetail from './pages/CategoryDetail/CategoryDetail';
 import QuizPlay from './pages/QuizPlay/QuizPlay';
 import Footer from './components/Footer/Footer';
+import VerifyEmail from './pages/VerifyEmail/VerifyEmail';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
+import { Toaster } from 'react-hot-toast';
 
 /* ── Seeded star field so stars don't re-randomise on render ── */
 function seededRandom(seed) {
@@ -64,8 +67,22 @@ export default function App() {
           <Route path="/play/:quizId" element={<QuizPlay />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/about" element={<About />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
         <Footer />
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            style: {
+              background: '#1a103c',
+              color: '#fff',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '12px',
+              fontFamily: "'Outfit', sans-serif"
+            },
+          }}
+        />
       </div>
     </>
   );

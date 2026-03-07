@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './AuthModal.css';
+import toast from 'react-hot-toast';
 
 export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
     const [mode, setMode] = useState(initialMode);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
+    const [loading, setLoading] = useState(false);
 
     // Sync initial mode when triggered from different buttons
     useEffect(() => {
@@ -27,7 +29,62 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
 
     if (!isOpen) return null;
 
-    const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+    const handleChange = (e) => {
+        setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (mode === 'signup' && form.password !== form.confirm) {
+            toast.error('Passwords do not match');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const endpoint = mode === 'signup' ? '/api/auth/register' : '/api/auth/login';
+            const payload = mode === 'signup'
+                ? { name: form.name, email: form.email, password: form.password }
+                : { email: form.email, password: form.password };
+
+            const res = await fetch(`http://localhost:5000${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include', // needed for cookies
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                // For login vs login unverified
+                if (mode === 'login' && res.status === 401 && data.message.includes('verify')) {
+                    toast.error('Please check your email to verify your account.');
+                } else {
+                    toast.error(data.message || 'Authentication failed');
+                }
+                return;
+            }
+
+            if (mode === 'signup') {
+                toast.success('Registration successful! Check your email.');
+                setForm({ name: '', email: '', password: '', confirm: '' });
+                setMode('login');
+            } else {
+                toast.success('Login successful!');
+                localStorage.setItem('user', JSON.stringify(data.user));
+                onClose();
+                window.location.reload();
+            }
+
+        } catch (err) {
+            console.error('Auth Error:', err);
+            toast.error('Something went wrong. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="auth-backdrop" onClick={handleBackdropClick}>
@@ -80,7 +137,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                 </div>
 
                 {/* Form */}
-                <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+                <form className="auth-form" onSubmit={handleSubmit}>
                     {mode === 'signup' && (
                         <div className="auth-field">
                             <label>Full Name</label>
@@ -163,8 +220,10 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                         </div>
                     )}
 
-                    <button type="submit" className="auth-submit">
-                        {mode === 'login' ? 'Log In' : 'Create Account'}
+                    <button type="submit" className="auth-submit" disabled={loading}>
+                        {loading
+                            ? 'Please wait...'
+                            : (mode === 'login' ? 'Log In' : 'Create Account')}
                     </button>
                 </form>
 

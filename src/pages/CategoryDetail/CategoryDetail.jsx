@@ -12,6 +12,7 @@ const CAT_CONFIG = {
     'entertainment': { gradient: 'linear-gradient(160deg, #6c1187 0%, #3e0750 100%)', image: '/landing_page-assets/cat_entertainment.png', btnGrad: 'linear-gradient(135deg, #6c23b5 0%, #3e0c70 100%)' },
     'geography': { gradient: 'linear-gradient(160deg, #0e7c5a 0%, #064534 100%)', image: '/landing_page-assets/cat_geography_1772800391003.png', btnGrad: 'linear-gradient(135deg, #37bdae 0%, #177567 100%)' },
     'sports': { gradient: 'linear-gradient(160deg, #9c7c0a 0%, #5a4600 100%)', image: '/landing_page-assets/cat_sports_1772800427142.png', btnGrad: 'linear-gradient(135deg, #bda237 0%, #685810 100%)' },
+    'computer-science': { gradient: 'linear-gradient(160deg, #0f172a 0%, #020617 100%)', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=1000', btnGrad: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)' },
 };
 
 const DIFF_STARS = { easy: 2, medium: 3, hard: 5 };
@@ -107,7 +108,7 @@ export default function CategoryDetail() {
                         <p className="cd-hero-sub">{category.description || `Test your knowledge across all ${category.label} topics.`}</p>
                     </div>
                     <div className="cd-hero-img-wrap">
-                        <img src={cfg.image} alt={category.label} className="cd-hero-img"
+                        <img src={category.image || cfg.image} alt={category.label} className="cd-hero-img"
                             onError={e => { e.target.onerror = null; e.target.src = '/landing_page-assets/cat_general.png'; }} />
                     </div>
                 </div>
@@ -155,12 +156,14 @@ export default function CategoryDetail() {
                                     <div className="cd-qcard-shine" />
 
                                     {/* Icon panel — same gradient style as category cards */}
-                                    <div className="cd-qcard-icon" style={{ background: dc.bg }}>
-                                        <img
-                                            src="/landing_page-assets/clipboard.png"
-                                            alt=""
-                                            className="cd-qcard-icon-img"
-                                        />
+                                    <div className="cd-qcard-icon" style={{ background: quiz.heroImage ? `url(${quiz.heroImage}) center/cover no-repeat` : dc.bg }}>
+                                        {!quiz.heroImage && (
+                                            <img
+                                                src="/landing_page-assets/clipboard.png"
+                                                alt=""
+                                                className="cd-qcard-icon-img"
+                                            />
+                                        )}
                                     </div>
 
                                     {/* Info */}

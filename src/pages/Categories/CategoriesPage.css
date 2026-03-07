@@ -1,3 +1,235 @@
+/* ============================================================
+   CATEGORIES PAGE — CINEMATIC HERO BANNER
+   ============================================================ */
+
+/* ── Hero section ── */
+.cp-hero {
+    position: relative;
+    width: 100%;
+    min-height: 520px;
+    padding: 60px 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Content wrapper */
+.cp-hero-inner {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    width: 100%;
+}
+
+.cp-hero-left {
+    flex: 1;
+    max-width: 600px;
+}
+
+.cp-hero-right {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main Graphic Asset */
+.cp-hero-img-asset {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+    z-index: 5;
+    position: relative;
+}
+
+/* Main heading */
+.cp-hero-heading {
+    font-size: clamp(2.6rem, 4vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: #ffffff;
+    margin-bottom: 24px;
+    font-family: 'Outfit', sans-serif;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Sub text - Bold */
+.cp-hero-sub-bold {
+    font-size: clamp(1.1rem, 1.5vw, 1.25rem);
+    font-weight: 600;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+/* Divider */
+.cp-hero-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent);
+    margin-bottom: 20px;
+}
+
+/* Sub text - Normal */
+.cp-hero-sub {
+    font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+    line-height: 1.6;
+    color: #94a3b8;
+    margin-bottom: 32px;
+}
+
+/* Action Button - 3D */
+.cp-hero-btn {
+    position: relative;
+    background: linear-gradient(135deg, #4477FF 0%, #3020A0 100%);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 15px rgba(68, 119, 255, 0.2);
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), filter 0.15s;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.cp-hero-btn:hover {
+    filter: brightness(1.15);
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(0, 0, 0, 0.3), 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 25px rgba(68, 119, 255, 0.3);
+}
+
+.cp-hero-btn:active {
+    transform: scale(0.96) translateY(2px);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
+    filter: brightness(0.95);
+}
+
+/* Floating decorative elements */
+.cp-hero-float {
+    position: absolute;
+    object-fit: contain;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.cp-hf-star1 {
+    width: 35px;
+    top: 5%;
+    left: 5%;
+    filter: drop-shadow(0 5px 14px rgba(255, 255, 100, 0.6));
+    rotate: -12deg;
+}
+
+.cp-hf-star2 {
+    width: 25px;
+    bottom: 20%;
+    right: -5%;
+    filter: drop-shadow(0 4px 10px rgba(255, 255, 100, 0.5));
+    rotate: 20deg;
+}
+
+.cp-hf-globe {
+    width: 60px;
+    top: -10%;
+    right: 5%;
+    filter: drop-shadow(0 6px 16px rgba(80, 140, 255, 0.5));
+    rotate: -15deg;
+}
+
+.cp-hf-sparkle {
+    width: 45px;
+    bottom: -15%;
+    right: -10%;
+    opacity: 0.8;
+}
+
+/* Float animations */
+@keyframes cpFloatSlow {
+
+    0%,
+    100% {
+        translate: 0 0
+    }
+
+    50% {
+        translate: 0 -10px
+    }
+}
+
+@keyframes cpFloatMedium {
+
+    0%,
+    100% {
+        translate: 0 0
+    }
+
+    50% {
+        translate: 0 -15px
+    }
+}
+
+@keyframes cpFloatFast {
+
+    0%,
+    100% {
+        translate: 0 0
+    }
+
+    50% {
+        translate: 0 -8px
+    }
+}
+
+.float-slow {
+    animation: cpFloatSlow 6s ease-in-out infinite;
+}
+
+.float-medium {
+    animation: cpFloatMedium 4.5s ease-in-out infinite;
+    animation-delay: -1.2s;
+}
+
+.float-fast {
+    animation: cpFloatFast 3.2s ease-in-out infinite;
+    animation-delay: -2s;
+}
+
+/* ── Hero responsive ── */
+@media (max-width: 960px) {
+    .cp-hero-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .cp-hero-left {
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cp-hero-divider {
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .cp-hero-sub-bold,
+    .cp-hero-sub {
+        max-width: 600px;
+    }
+}
+
 /* ============ CATEGORIES PAGE ============ */
 .categories-page {
     position: relative;
@@ -174,8 +406,11 @@
 
 .ai-tb-input-group {
     display: flex;
+    flex-direction: column;
     gap: 15px;
-    max-width: 650px;
+    max-width: 500px;
+    /* Matched to home page for consistency */
+    margin-bottom: 20px;
 }
 
 .ai-tb-input {
@@ -574,5 +809,64 @@
     .cp-btn {
         font-size: 0.78rem;
         padding: 7px 0;
+    }
+}
+
+/* ── AI DIFFICULTY SELECTOR ── */
+.ai-difficulty-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 5;
+    position: relative;
+}
+
+.ai-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ai-diff-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.ai-diff-select {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    outline: none;
+    transition: all 0.2s;
+    backdrop-filter: blur(10px);
+}
+
+.ai-diff-select:focus {
+    background: #fff;
+    color: #1a0b2e;
+    border-color: #fff;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
+}
+
+.ai-diff-select option {
+    background: #1a0b2e;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .ai-difficulty-selector {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
     }
 }

@@ -1,0 +1,96 @@
+.ai-loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 8, 35, 0.9);
+    backdrop-filter: blur(12px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Outfit', sans-serif;
+}
+
+.ai-loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    text-align: center;
+}
+
+/* ── REUSED RING FROM QUIZPLAY ── */
+.qp-loader-ring {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: relative;
+    background: conic-gradient(from 0deg, transparent 0%, #7b2cbf 50%, #3d5afe 100%);
+    animation: qpRotate 1.5s linear infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qp-loader-ring::before {
+    content: '';
+    position: absolute;
+    width: 88%;
+    height: 88%;
+    background: #0f0823;
+    border-radius: 50%;
+}
+
+@keyframes qpRotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.ai-loader-text {
+    color: #fff;
+    max-width: 320px;
+}
+
+.ai-loader-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #7b2cbf, #3d5afe);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.ai-loader-msg {
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    min-height: 48px;
+    line-height: 1.4;
+    animation: qpFadeInOut 2.5s ease-in-out infinite;
+}
+
+@keyframes qpFadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    85% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}

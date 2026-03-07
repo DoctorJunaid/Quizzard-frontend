@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import './Navbar.css';
 import AuthModal from '../AuthModal/AuthModal';
 
@@ -8,6 +9,28 @@ export default function Navbar() {
     const [authOpen, setAuthOpen] = useState(false);
     const [authMode, setAuthMode] = useState('login');
     const [menuOpen, setMenuOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+
+    // Check for user in local storage
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, [authOpen]); // Re-check when modal closes (potentially after login)
+
+    const handleLogout = async () => {
+        try {
+            await fetch('http://localhost:5000/api/auth/logout', { method: 'POST' });
+            localStorage.removeItem('user');
+            setUser(null);
+            toast.success('Logged out successfully');
+            navigate('/');
+        } catch (err) {
+            toast.error('Logout failed');
+        }
+    };
 
     const openAuth = (mode) => {
         setAuthMode(mode);
@@ -57,8 +80,20 @@ export default function Navbar() {
 
                     {/* Desktop CTA */}
                     <div className="nav-cta-group">
-                        <button className="nav-cta-ghost" onClick={() => openAuth('login')}>Log In</button>
-                        <button className="nav-cta" onClick={() => openAuth('signup')}>Sign Up</button>
+                        {user ? (
+                            <div className="nav-user-profile">
+                                <div className="nav-user-info">
+                                    <img src={user.avatar || "/landing_page-assets/trophy_compressed.png"} alt={user.name} className="nav-user-avatar" />
+                                    <span className="nav-user-name">{user.name.split(' ')[0]}</span>
+                                </div>
+                                <button className="nav-cta-ghost" onClick={handleLogout}>Log Out</button>
+                            </div>
+                        ) : (
+                            <>
+                                <button className="nav-cta-ghost" onClick={() => openAuth('login')}>Log In</button>
+                                <button className="nav-cta" onClick={() => openAuth('signup')}>Sign Up</button>
+                            </>
+                        )}
                     </div>
 
                     {/* Hamburger */}
@@ -88,8 +123,20 @@ export default function Navbar() {
                             ))}
                         </ul>
                         <div className="nav-mobile-cta">
-                            <button className="nav-cta-ghost" onClick={() => openAuth('login')}>Log In</button>
-                            <button className="nav-cta" onClick={() => openAuth('signup')}>Sign Up</button>
+                            {user ? (
+                                <div className="nav-mobile-user">
+                                    <div className="nav-user-info">
+                                        <img src={user.avatar || "/landing_page-assets/trophy_compressed.png"} alt={user.name} className="nav-user-avatar" />
+                                        <span className="nav-user-name">{user.name}</span>
+                                    </div>
+                                    <button className="nav-cta-ghost" onClick={handleLogout} style={{ width: '100%', marginTop: '1rem' }}>Log Out</button>
+                                </div>
+                            ) : (
+                                <>
+                                    <button className="nav-cta-ghost" onClick={() => openAuth('login')}>Log In</button>
+                                    <button className="nav-cta" onClick={() => openAuth('signup')}>Sign Up</button>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
