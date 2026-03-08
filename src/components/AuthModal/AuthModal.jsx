@@ -28,16 +28,17 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         return () => window.removeEventListener('keydown', handler);
     }, [isOpen, onClose]);
 
-    // Google Sign-In — initialize the GSI library with our callback
-    // We use prompt() via a custom button instead of renderButton() to avoid
-    // the slow cross-origin iframe cold-load (which caused 10-25s delays).
+    // Google Sign-In — use renderButton() with an invisible overlay technique.
+    // renderButton() embeds Google's iframe which handles clicks natively inside
+    // the iframe origin — so it can NEVER be popup-blocked by the browser.
+    // We layer it transparently over our custom-styled visual button.
     useEffect(() => {
         if (!isOpen) return;
-        googleInitialized.current = false;
 
         const handleGoogleResponse = async (response) => {
             if (!response.credential) return;
             setLoading(true);
+            const loadingToastId = toast.loading('Signing in with Google...');
             try {
                 const res = await fetch(`${window.API_BASE_URL}/api/auth/google`, {
                     method: 'POST',
@@ -46,15 +47,18 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                 });
 
                 const data = await res.json();
+                toast.dismiss(loadingToastId);
                 if (res.ok) {
                     toast.success('Google Login successful!');
                     localStorage.setItem('user', JSON.stringify(data.user));
                     onClose();
                     window.location.reload();
                 } else {
+                    console.error('Google Auth Backend Error:', data);
                     toast.error(data.message || 'Google authentication failed');
                 }
             } catch (err) {
+                toast.dismiss(loadingToastId);
                 console.error('Google Auth Error:', err);
                 toast.error('Failed to connect to authentication server');
             } finally {
@@ -62,42 +66,47 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
             }
         };
 
-        const initGoogle = () => {
-            if (window.google && !googleInitialized.current) {
-                googleInitialized.current = true;
-                window.google.accounts.id.initialize({
-                    client_id: window.GOOGLE_CLIENT_ID,
-                    callback: handleGoogleResponse,
-                    auto_select: false,
-                    cancel_on_tap_outside: true,
-                    ux_mode: 'popup',
-                });
-            }
+        const renderGoogleButton = () => {
+            if (!window.google) return;
+            const container = document.getElementById('google-iframe-overlay');
+            if (!container) return;
+
+            // Clear any previous render
+            container.innerHTML = '';
+
+            window.google.accounts.id.initialize({
+                client_id: window.GOOGLE_CLIENT_ID,
+                callback: handleGoogleResponse,
+                auto_select: false,
+                cancel_on_tap_outside: true,
+            });
+
+            // Render the real Google button into our invisible overlay div.
+            // Width must match the container so the iframe fills it entirely.
+            window.google.accounts.id.renderButton(container, {
+                theme: 'outline',
+                size: 'large',
+                width: 360,
+                text: 'continue_with',
+                shape: 'rectangular',
+            });
+
+            googleInitialized.current = true;
         };
 
-        // Retry if the GSI script isn't loaded yet
+        // Render immediately or wait for the GSI script to load
         if (window.google) {
-            initGoogle();
+            renderGoogleButton();
         } else {
             const timer = setInterval(() => {
-                if (window.google) { initGoogle(); clearInterval(timer); }
+                if (window.google) {
+                    renderGoogleButton();
+                    clearInterval(timer);
+                }
             }, 100);
             return () => clearInterval(timer);
         }
     }, [isOpen]);
-
-    // Custom Google button click handler — triggers the GSI popup immediately
-    const handleGoogleClick = () => {
-        if (!window.google || !googleInitialized.current) {
-            toast.error('Google Sign-In is not ready yet. Please try again in a moment.');
-            return;
-        }
-        window.google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                toast.error('Google Sign-In popup was blocked. Please allow popups for this site and try again.');
-            }
-        });
-    };
 
     if (!isOpen) return null;
 
@@ -195,21 +204,25 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                         <button className={`auth-tab ${mode === 'signup' ? 'active' : ''}`} onClick={() => setMode('signup')}>Sign Up</button>
                     </div>
 
-                    {/* Custom Google Button — no iframe, instant click */}
-                    <button
-                        type="button"
-                        className="auth-google-btn"
-                        onClick={handleGoogleClick}
-                        disabled={loading}
-                    >
-                        <svg className="auth-google-icon" viewBox="0 0 48 48">
-                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
-                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
-                        </svg>
-                        Continue with Google
-                    </button>
+                    {/* Google Sign-In — overlay technique:
+                        - .auth-google-visual = our styled button (visual only, pointer-events:none)
+                        - #google-iframe-overlay = real Google iframe on top (opacity ~0, intercepts clicks)
+                        This prevents ANY popup blocking since Google handles clicks inside its own iframe. */}
+                    <div className="google-btn-container">
+                        {/* Visual layer — our 3D custom design */}
+                        <div className="auth-google-visual" aria-hidden="true">
+                            <svg className="auth-google-icon" viewBox="0 0 48 48">
+                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                            </svg>
+                            Continue with Google
+                        </div>
+                        {/* Real Google iframe — transparent overlay, catches the actual click */}
+                        <div id="google-iframe-overlay" className="google-iframe-overlay"></div>
+                    </div>
+
 
                     {/* Divider */}
                     <div className="auth-divider">
