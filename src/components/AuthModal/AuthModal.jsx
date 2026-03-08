@@ -43,6 +43,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                 const res = await fetch(`${window.API_BASE_URL}/api/auth/google`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({ idToken: response.credential })
                 });
 
@@ -51,6 +52,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                 if (res.ok) {
                     toast.success('Google Login successful!');
                     localStorage.setItem('user', JSON.stringify(data.user));
+                    if (data.token) localStorage.setItem('token', data.token);
                     onClose();
                     window.location.reload();
                 } else {
@@ -155,6 +157,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
             } else {
                 toast.success('Login successful!');
                 localStorage.setItem('user', JSON.stringify(data.user));
+                if (data.token) localStorage.setItem('token', data.token);
                 onClose();
                 window.location.reload();
             }

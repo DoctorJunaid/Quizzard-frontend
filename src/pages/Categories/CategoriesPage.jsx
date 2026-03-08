@@ -60,7 +60,10 @@ export default function CategoriesPage() {
 
             const res = await fetch(`${API_BASE_URL}/api/ai/generate`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
                 credentials: 'include',
                 body: JSON.stringify({
                     topic: aiTopic,

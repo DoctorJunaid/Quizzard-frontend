@@ -70,7 +70,10 @@ export default function QuizPlay() {
                 if (!qRes.ok) throw new Error('Quiz not found');
                 const qData = await qRes.json();
                 setQuiz(qData.quiz);
-                const chk = await fetch(`${window.API_BASE_URL}/api/quizzes/${quizId}/check-attempt`);
+                const chk = await fetch(`${window.API_BASE_URL}/api/quizzes/${quizId}/check-attempt`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    credentials: 'include'
+                });
                 const chkD = await chk.json();
                 if (!chkD.canAttempt) setError('You have already completed this quiz.');
             } catch (e) { setError(e.message); }
@@ -83,7 +86,12 @@ export default function QuizPlay() {
         try {
             setLoading(true);
             const res = await fetch(`${window.API_BASE_URL}/api/attempts/start`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                credentials: 'include',
                 body: JSON.stringify({ quizId }),
             });
             if (!res.ok) throw new Error('Failed to start');
@@ -118,7 +126,12 @@ export default function QuizPlay() {
         try {
             setLoading(true);
             const res = await fetch(`${window.API_BASE_URL}/api/attempts/${attemptId}/submit`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                credentials: 'include',
                 body: JSON.stringify({ answers, timeTaken: time }),
             });
             const data = await res.json();

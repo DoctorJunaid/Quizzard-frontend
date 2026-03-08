@@ -23,8 +23,13 @@ export default function Navbar() {
 
     const handleLogout = async () => {
         try {
-            await fetch(`${API_BASE_URL}/api/auth/logout`, { method: 'POST' });
+            await fetch(`${API_BASE_URL}/api/auth/logout`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                credentials: 'include'
+            });
             localStorage.removeItem('user');
+            localStorage.removeItem('token');
             setUser(null);
             toast.success('Logged out successfully');
             navigate('/', { viewTransition: true });
