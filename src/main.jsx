@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.jsx'
 
 window.API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+window.GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-default-id-if-needed';
 
 
 createRoot(document.getElementById('root')).render(

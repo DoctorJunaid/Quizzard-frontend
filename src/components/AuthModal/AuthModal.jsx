@@ -60,7 +60,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         const initGoogle = () => {
             if (window.google) {
                 window.google.accounts.id.initialize({
-                    client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+                    client_id: window.GOOGLE_CLIENT_ID,
                     callback: handleGoogleResponse,
                 });
                 window.google.accounts.id.renderButton(
