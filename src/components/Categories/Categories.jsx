@@ -19,6 +19,13 @@ const CAT_META = {
 
 const FALLBACK_IMAGE = '/landing_page-assets/cat_general.png';
 
+const FALLBACK_CATEGORIES = [
+    { _id: 'fallback_1', key: 'general', image: '/landing_page-assets/cat_general.png', label: 'General Knowledge' },
+    { _id: 'fallback_2', key: 'science', image: '/landing_page-assets/cat_science.png', label: 'Science & Nature' },
+    { _id: 'fallback_3', key: 'history', image: '/landing_page-assets/cat_history.png', label: 'History' },
+    { _id: 'fallback_4', key: 'technology', image: '/landing_page-assets/cat_technology_1772800409924.png', label: 'Technology' },
+];
+
 export default function Categories() {
     const [categories, setCategories] = useState([]);
     const [aiTopic, setAiTopic] = useState('');
@@ -29,8 +36,11 @@ export default function Categories() {
     useEffect(() => {
         fetch('http://localhost:5000/api/categories')
             .then(r => r.json())
-            .then(data => setCategories((data.categories || []).slice(0, 4)))
-            .catch(() => setCategories([]));
+            .then(data => {
+                const fetched = data.categories || [];
+                setCategories(fetched.length > 0 ? fetched.slice(0, 4) : FALLBACK_CATEGORIES);
+            })
+            .catch(() => setCategories(FALLBACK_CATEGORIES));
     }, []);
 
     const handleGenerateAIQuiz = async () => {

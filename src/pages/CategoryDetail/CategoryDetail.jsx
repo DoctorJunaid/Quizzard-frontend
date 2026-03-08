@@ -42,6 +42,21 @@ function StarRow({ difficulty }) {
     );
 }
 
+const ALL_CATEGORIES = [
+    { id: 1, key: 'general', image: '/landing_page-assets/cat_general.png', label: 'General Knowledge' },
+    { id: 2, key: 'science', image: '/landing_page-assets/cat_science.png', label: 'Science & Nature' },
+    { id: 'history', key: 'history', image: '/landing_page-assets/cat_history.png', label: 'History' },
+    { id: 'entertainment', key: 'entertainment', image: '/landing_page-assets/cat_entertainment.png', label: 'Entertainment' },
+    { id: 'geography', key: 'geography', image: '/landing_page-assets/cat_geography_1772800391003.png', label: 'Geography' },
+    { id: 'technology', key: 'technology', image: '/landing_page-assets/cat_technology_1772800409924.png', label: 'Technology' },
+    { id: 'literature', key: 'literature', image: '/landing_page-assets/cat_general.png', label: 'Literature' },
+    { id: 'movies', key: 'movies', image: '/landing_page-assets/cat_entertainment.png', label: 'Movies & TV' },
+    { id: 'music', key: 'music', image: '/landing_page-assets/cat_history.png', label: 'Music' },
+    { id: 'sports', key: 'sports', image: '/landing_page-assets/cat_sports_1772800427142.png', label: 'Sports' },
+    { id: 'art', key: 'art', image: '/landing_page-assets/cat_general.png', label: 'Art & Culture' },
+    { id: 'gaming', key: 'gaming', image: '/landing_page-assets/cat_technology_1772800409924.png', label: 'Gaming' },
+];
+
 export default function CategoryDetail() {
     const { categoryId } = useParams();
     const [category, setCategory] = useState(null);
@@ -55,15 +70,27 @@ export default function CategoryDetail() {
             try {
                 const catRes = await fetch('http://localhost:5000/api/categories');
                 const catData = await catRes.json();
-                const found = catData.categories.find(c => c._id === categoryId || c.key === categoryId);
+                let found = (catData.categories || []).find(c => c._id === categoryId || c.key === categoryId);
+
+                if (!found) {
+                    found = ALL_CATEGORIES.find(c => c.key === categoryId || String(c.id) === categoryId);
+                }
+
                 if (found) {
                     setCategory(found);
-                    const qRes = await fetch(`http://localhost:5000/api/quizzes?category=${found._id}`);
-                    const qData = await qRes.json();
-                    setQuizzes(qData.quizzes || []);
+                    if (found._id) {
+                        const qRes = await fetch(`http://localhost:5000/api/quizzes?category=${found._id}`);
+                        const qData = await qRes.json();
+                        setQuizzes(qData.quizzes || []);
+                    } else {
+                        setQuizzes([]);
+                    }
                 }
             } catch (e) {
                 console.error(e);
+                const foundFallback = ALL_CATEGORIES.find(c => c.key === categoryId || String(c.id) === categoryId);
+                if (foundFallback) setCategory(foundFallback);
+                setQuizzes([]);
             } finally {
                 setLoading(false);
             }
