@@ -66,11 +66,11 @@ export default function QuizPlay() {
     useEffect(() => {
         const init = async () => {
             try {
-                const qRes = await fetch(`http://localhost:5000/api/quizzes/${quizId}`);
+                const qRes = await fetch(`${window.API_BASE_URL}/api/quizzes/${quizId}`);
                 if (!qRes.ok) throw new Error('Quiz not found');
                 const qData = await qRes.json();
                 setQuiz(qData.quiz);
-                const chk = await fetch(`http://localhost:5000/api/quizzes/${quizId}/check-attempt`);
+                const chk = await fetch(`${window.API_BASE_URL}/api/quizzes/${quizId}/check-attempt`);
                 const chkD = await chk.json();
                 if (!chkD.canAttempt) setError('You have already completed this quiz.');
             } catch (e) { setError(e.message); }
@@ -82,14 +82,14 @@ export default function QuizPlay() {
     const handleStart = async () => {
         try {
             setLoading(true);
-            const res = await fetch('http://localhost:5000/api/attempts/start', {
+            const res = await fetch(`${window.API_BASE_URL}/api/attempts/start`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ quizId }),
             });
             if (!res.ok) throw new Error('Failed to start');
             const data = await res.json();
             setAttemptId(data.attempt._id);
-            const qRes = await fetch(`http://localhost:5000/api/questions/${quizId}`);
+            const qRes = await fetch(`${window.API_BASE_URL}/api/questions/${quizId}`);
             if (!qRes.ok) throw new Error('Failed to fetch questions');
             const qData = await qRes.json();
             setQuestions(qData.questions);
@@ -117,7 +117,7 @@ export default function QuizPlay() {
     const submitQuiz = async () => {
         try {
             setLoading(true);
-            const res = await fetch(`http://localhost:5000/api/attempts/${attemptId}/submit`, {
+            const res = await fetch(`${window.API_BASE_URL}/api/attempts/${attemptId}/submit`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ answers, timeTaken: time }),
             });

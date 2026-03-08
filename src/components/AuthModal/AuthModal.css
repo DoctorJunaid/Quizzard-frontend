@@ -163,6 +163,13 @@
 }
 
 /* Google Button */
+.auth-google-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+    width: 100%;
+}
+
 .auth-google-btn {
     width: 100%;
     display: flex;
