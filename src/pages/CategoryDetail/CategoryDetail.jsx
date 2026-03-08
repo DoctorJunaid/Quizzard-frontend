@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './CategoryDetail.css';
+import { API_BASE_URL } from '../../config';
 
 /* ─── Category config (matching seeded DB keys) ─── */
 const CAT_CONFIG = {
@@ -68,7 +69,7 @@ export default function CategoryDetail() {
     useEffect(() => {
         const load = async () => {
             try {
-                const catRes = await fetch('http://localhost:5000/api/categories');
+                const catRes = await fetch(`${API_BASE_URL}/api/categories`);
                 const catData = await catRes.json();
                 let found = (catData.categories || []).find(c => c._id === categoryId || c.key === categoryId);
 
@@ -79,7 +80,7 @@ export default function CategoryDetail() {
                 if (found) {
                     setCategory(found);
                     if (found._id) {
-                        const qRes = await fetch(`http://localhost:5000/api/quizzes?category=${found._id}`);
+                        const qRes = await fetch(`${API_BASE_URL}/api/quizzes?category=${found._id}`);
                         const qData = await qRes.json();
                         setQuizzes(qData.quizzes || []);
                     } else {

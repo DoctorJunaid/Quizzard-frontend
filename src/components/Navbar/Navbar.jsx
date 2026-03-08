@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import './Navbar.css';
 import AuthModal from '../AuthModal/AuthModal';
+import { API_BASE_URL } from '../../config';
 
 export default function Navbar() {
     const location = useLocation();
@@ -22,7 +23,7 @@ export default function Navbar() {
 
     const handleLogout = async () => {
         try {
-            await fetch('http://localhost:5000/api/auth/logout', { method: 'POST' });
+            await fetch(`${API_BASE_URL}/api/auth/logout`, { method: 'POST' });
             localStorage.removeItem('user');
             setUser(null);
             toast.success('Logged out successfully');

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import '../VerifyEmail/VerifyEmail.css'; // Reusing the same styling for the card
+import { API_BASE_URL } from '../../config';
 
 export default function ResetPassword() {
     const [searchParams] = useSearchParams();
@@ -36,7 +37,7 @@ export default function ResetPassword() {
 
         setStatus('loading');
         try {
-            const res = await fetch(`http://localhost:5000/api/auth/reset-password?token=${token}`, {
+            const res = await fetch(`${API_BASE_URL}/api/auth/reset-password?token=${token}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password })

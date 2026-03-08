@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AILoader from '../AILoader/AILoader';
 import './Categories.css';
+import { API_BASE_URL } from '../../config';
 
 /* ── Asset + gradient mapping per seeded key ── */
 const CAT_META = {
@@ -34,7 +35,7 @@ export default function Categories() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/categories')
+        fetch(`${API_BASE_URL}/api/categories`)
             .then(r => r.json())
             .then(data => {
                 const fetched = data.categories || [];
@@ -50,7 +51,7 @@ export default function Categories() {
             const generalCat = categories.find(c => c.key === 'general') || categories[0] || { _id: null };
             const catId = generalCat._id || generalCat.id;
 
-            const res = await fetch('http://localhost:5000/api/ai/generate', {
+            const res = await fetch(`${API_BASE_URL}/api/ai/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import './VerifyEmail.css';
+import { API_BASE_URL } from '../../config';
 
 export default function VerifyEmail() {
     const [searchParams] = useSearchParams();
@@ -22,7 +23,7 @@ export default function VerifyEmail() {
 
         const verify = async () => {
             try {
-                const res = await fetch(`http://localhost:5000/api/auth/verify-email?token=${token}`);
+                const res = await fetch(`${API_BASE_URL}/api/auth/verify-email?token=${token}`);
                 const data = await res.json();
                 if (res.ok) {
                     setStatus('success');

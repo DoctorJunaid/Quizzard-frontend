@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AILoader from '../../components/AILoader/AILoader';
 import './CategoriesPage.css';
+import { API_BASE_URL } from '../../config';
 
 const ALL_CATEGORIES = [
     { id: 1, key: 'general', image: '/landing_page-assets/cat_general.png', label: 'General Knowledge' },
@@ -32,7 +33,7 @@ export default function CategoriesPage() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/categories');
+                const res = await fetch(`${API_BASE_URL}/api/categories`);
                 const data = await res.json();
                 setCategories(data.categories || []);
             } catch {
@@ -57,7 +58,7 @@ export default function CategoriesPage() {
             const generalCat = categories.find(c => c.key === 'general') || categories[0] || ALL_CATEGORIES[0];
             const catId = generalCat._id || generalCat.id;
 
-            const res = await fetch('http://localhost:5000/api/ai/generate', {
+            const res = await fetch(`${API_BASE_URL}/api/ai/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
