@@ -93,7 +93,7 @@ export default function CategoryDetail() {
             <div className="container">
 
                 {/* ── Back ── */}
-                <Link to="/categories" className="cd-back">
+                <Link to="/categories" className="cd-back" viewTransition>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
@@ -188,6 +188,7 @@ export default function CategoryDetail() {
                                         to={`/play/${quiz._id}`}
                                         className="cd-start-btn"
                                         style={{ background: cfg.btnGrad }}
+                                        viewTransition
                                     >
                                         Start Quiz
                                     </Link>
@@ -215,7 +216,7 @@ export default function CategoryDetail() {
                                     </div>
                                 ))}
                             </div>
-                            <Link to="/leaderboard" className="cd-lb-btn" style={{ background: cfg.btnGrad }}>
+                            <Link to="/leaderboard" className="cd-lb-btn" style={{ background: cfg.btnGrad }} viewTransition>
                                 View Leaderboard
                             </Link>
                         </div>
@@ -225,7 +226,7 @@ export default function CategoryDetail() {
                             <div className="cd-promo-shine" />
                             <img src="/landing_page-assets/trophy_compressed.png" alt="trophy" className="cd-promo-img" />
                             <p className="cd-promo-text">Sign in to save scores &amp; climb the leaderboard!</p>
-                            <Link to="/log-in" className="cd-promo-btn" style={{ background: cfg.btnGrad }}>
+                            <Link to="/log-in" className="cd-promo-btn" style={{ background: cfg.btnGrad }} viewTransition>
                                 Sign In
                             </Link>
                         </div>

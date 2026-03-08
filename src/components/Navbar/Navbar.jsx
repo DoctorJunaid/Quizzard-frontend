@@ -26,7 +26,7 @@ export default function Navbar() {
             localStorage.removeItem('user');
             setUser(null);
             toast.success('Logged out successfully');
-            navigate('/');
+            navigate('/', { viewTransition: true });
         } catch (err) {
             toast.error('Logout failed');
         }
@@ -60,7 +60,7 @@ export default function Navbar() {
                 <div className="navbar-inner container">
 
                     {/* Logo */}
-                    <Link to="/" className="nav-logo">
+                    <Link to="/" className="nav-logo" viewTransition>
                         <div className="nav-logo-icon">
                             <img src="/landing_page-assets/trophy_compressed.png" alt="Quizard" className="nav-logo-img" />
                         </div>
@@ -71,7 +71,7 @@ export default function Navbar() {
                     <ul className="nav-links">
                         {links.map(({ to, label }) => (
                             <li key={to}>
-                                <Link to={to} className={`nav-link ${location.pathname === to ? 'nav-link--active' : ''}`}>
+                                <Link to={to} className={`nav-link ${location.pathname === to ? 'nav-link--active' : ''}`} viewTransition>
                                     {label}
                                 </Link>
                             </li>
@@ -116,6 +116,7 @@ export default function Navbar() {
                                         to={to}
                                         className={`nav-mobile-link ${location.pathname === to ? 'active' : ''}`}
                                         onClick={() => setMenuOpen(false)}
+                                        viewTransition
                                     >
                                         {label}
                                     </Link>

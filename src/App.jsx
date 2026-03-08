@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import Leaderboard from './pages/Leaderboard/Leaderboard';
 import About from './pages/About/About';
@@ -11,51 +11,52 @@ import QuizPlay from './pages/QuizPlay/QuizPlay';
 import Footer from './components/Footer/Footer';
 import VerifyEmail from './pages/VerifyEmail/VerifyEmail';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
+import InteractiveBackground from './components/InteractiveBackground/InteractiveBackground';
 import { Toaster } from 'react-hot-toast';
-
-/* ── Seeded star field so stars don't re-randomise on render ── */
-function seededRandom(seed) {
-  let s = seed;
-  return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
-}
-const rand = seededRandom(42);
-const STARS = Array.from({ length: 180 }, (_, i) => {
-  const glow = i % 9 === 0;
-  const size = glow ? rand() * 3.5 + 2 : rand() * 2 + 0.6;
-  return {
-    id: i,
-    left: `${rand() * 100}%`,
-    top: `${rand() * 100}%`,
-    width: `${size}px`,
-    height: `${size}px`,
-    animationDelay: `${rand() * 8}s`,
-    animationDuration: `${rand() * 6 + 3}s`,
-    opacity: glow ? 0.95 : rand() * 0.55 + 0.25,
-    className: glow ? 'star star-glow' : 'star',
-  };
-});
+import Lenis from 'lenis';
 
 export default function App() {
+  const { pathname } = useLocation();
+  const lenisRef = React.useRef(null);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    lenisRef.current = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
+  // Sync scroll on route change - handled IMMEDIATELY for view transition
+  React.useLayoutEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    }
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
     <>
-      {/* fixed deep-space background */}
-      <div className="bg-layer" aria-hidden="true">
-        <div className="bg-image" />
-        <div className="bg-overlay" />
-        {STARS.map(s => (
-          <div
-            key={s.id}
-            className={s.className}
-            style={{
-              left: s.left, top: s.top,
-              width: s.width, height: s.height,
-              animationDelay: s.animationDelay,
-              animationDuration: s.animationDuration,
-              opacity: s.opacity,
-            }}
-          />
-        ))}
-      </div>
+      <InteractiveBackground />
 
       {/* page content */}
       <div className="page">

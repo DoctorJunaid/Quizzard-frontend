@@ -70,7 +70,7 @@ export default function CategoriesPage() {
             const data = await res.json();
             if (res.ok && data.quizId) {
                 toast.success('Quiz generated successfully!');
-                navigate(`/play/${data.quizId}`);
+                navigate(`/play/${data.quizId}`, { viewTransition: true });
             } else {
                 toast.error(data.message || 'Failed to generate quiz. Are you signed in?');
             }
@@ -217,7 +217,7 @@ export default function CategoriesPage() {
                                 </div>
                                 <div className="cp-footer">
                                     <h3 className="cp-label">{cat.label}</h3>
-                                    <Link to={`/categories/${cat.key}`} className="cp-btn">Explore Topics</Link>
+                                    <Link to={`/categories/${cat.key}`} className="cp-btn" viewTransition>Explore Topics</Link>
                                 </div>
                             </div>
                         </div>

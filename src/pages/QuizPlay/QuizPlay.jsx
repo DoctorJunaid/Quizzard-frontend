@@ -145,7 +145,7 @@ export default function QuizPlay() {
                 <img src="/landing_page-assets/clipboard.png" alt="" className="qp-modal-icon" />
                 <h2>Oops!</h2>
                 <p>{error}</p>
-                <Link to="/categories" className="qp-cta-btn" style={{ background: 'linear-gradient(135deg,#443063,#2b1d42)' }}>
+                <Link to="/categories" className="qp-cta-btn" style={{ background: 'linear-gradient(135deg,#443063,#2b1d42)' }} viewTransition>
                     ← Back to Categories
                 </Link>
             </div>
@@ -162,7 +162,7 @@ export default function QuizPlay() {
         return (
             <div className="qp-page">
                 <div className="qp-intro-wrap">
-                    <Link to="/categories" className="qp-back">
+                    <Link to="/categories" className="qp-back" viewTransition>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
@@ -251,9 +251,9 @@ export default function QuizPlay() {
                                 Try Again
                             </button>
                             {localStorage.getItem('token') ? (
-                                <Link to="/leaderboard" className="qp-ghost-btn">Leaderboard</Link>
+                                <Link to="/leaderboard" className="qp-ghost-btn" viewTransition>Leaderboard</Link>
                             ) : (
-                                <Link to="/categories" className="qp-more-btn">More Quizzes</Link>
+                                <Link to="/categories" className="qp-more-btn" viewTransition>More Quizzes</Link>
                             )}
                         </div>
                     </div>
@@ -322,7 +322,7 @@ export default function QuizPlay() {
                     </div>
 
                     <div className="qp-final-actions">
-                        <Link to="/categories" className="qp-back-link">← Back to All Categories</Link>
+                        <Link to="/categories" className="qp-back-link" viewTransition>← Back to All Categories</Link>
                     </div>
                 </div>
             </div >

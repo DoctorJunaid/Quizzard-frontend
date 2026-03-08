@@ -53,7 +53,7 @@ export default function Categories() {
             const data = await res.json();
             if (res.ok && data.quizId) {
                 toast.success('Quiz generated successfully!');
-                navigate(`/play/${data.quizId}`);
+                navigate(`/play/${data.quizId}`, { viewTransition: true });
             } else {
                 if (data.error?.includes('QUOTA_EXCEEDED') || data.message?.includes('QUOTA_EXCEEDED')) {
                     toast.error('AI limit reached. Please wait 1 minute and try again.', { duration: 5000 });
@@ -132,7 +132,7 @@ export default function Categories() {
                                 </div>
                                 <div className="cat-footer">
                                     <h3 className="cat-label">{cat.label}</h3>
-                                    <Link to={`/categories/${cat.key}`} className="cat-btn">Play Now</Link>
+                                    <Link to={`/categories/${cat.key}`} className="cat-btn" viewTransition>Play Now</Link>
                                 </div>
                             </div>
                         );
@@ -141,7 +141,7 @@ export default function Categories() {
 
                 {/* View all link */}
                 <div style={{ textAlign: 'center', marginTop: '28px' }}>
-                    <Link to="/categories" className="view-all-btn">View All Categories →</Link>
+                    <Link to="/categories" className="view-all-btn" viewTransition>View All Categories →</Link>
                 </div>
             </div>
         </section>
