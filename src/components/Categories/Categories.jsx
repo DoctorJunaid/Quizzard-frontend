@@ -71,8 +71,11 @@ export default function Categories() {
             } else {
                 if (data.error?.includes('QUOTA_EXCEEDED') || data.message?.includes('QUOTA_EXCEEDED')) {
                     toast.error('AI limit reached. Please wait 1 minute and try again.', { duration: 5000 });
+                } else if (!localStorage.getItem('token') || res.status === 401 || data.message?.includes('token not found') || data.message?.includes('Token')) {
+                    toast.error('You need to log in first to generate an AI quiz.');
+                    window.dispatchEvent(new CustomEvent('open-auth-modal', { detail: 'login' }));
                 } else {
-                    toast.error(data.message || 'Failed to generate quiz. Are you signed in?');
+                    toast.error(data.message || 'Failed to generate quiz.');
                 }
             }
         } catch (err) {

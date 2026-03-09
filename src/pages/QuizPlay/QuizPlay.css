@@ -700,6 +700,35 @@
         align-items: center;
         text-align: center;
     }
+
+    .qp-play-container {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .qp-progress-row,
+    .qp-qtimer-row,
+    .qp-qcard {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .qp-q-text {
+        font-size: 1.25rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .qp-intro-wrap {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .qp-results-page {
+        width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
 }
 
 /* ── Results Review Section ── */

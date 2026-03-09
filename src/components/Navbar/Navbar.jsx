@@ -44,6 +44,13 @@ export default function Navbar() {
         setMenuOpen(false);
     };
 
+    // Allow other components to trigger auth modal
+    useEffect(() => {
+        const handleOpenAuth = (e) => openAuth(e.detail || 'login');
+        window.addEventListener('open-auth-modal', handleOpenAuth);
+        return () => window.removeEventListener('open-auth-modal', handleOpenAuth);
+    }, []);
+
     // Close mobile menu on route change
     useEffect(() => { setMenuOpen(false); }, [location.pathname]);
 

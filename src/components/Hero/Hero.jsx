@@ -2,6 +2,23 @@ import React from 'react';
 import './Hero.css';
 
 export default function Hero() {
+    const handleGetStarted = () => {
+        if (localStorage.getItem('token')) {
+            window.location.href = '/categories';
+        } else {
+            window.dispatchEvent(new CustomEvent('open-auth-modal', { detail: 'signup' }));
+        }
+    };
+
+    const handleHowItWorks = () => {
+        const featuresSection = document.getElementById('features');
+        if (featuresSection) {
+            featuresSection.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            window.location.href = '/#features';
+        }
+    };
+
     return (
         <section className="hero">
             <div className="container hero-inner">
@@ -17,8 +34,8 @@ export default function Hero() {
                         topics. Learn, compete, and have fun!
                     </p>
                     <div className="hero-buttons">
-                        <button className="btn-primary hero-btn-primary">Get Started</button>
-                        <button className="hero-btn-ghost">How It Works</button>
+                        <button className="btn-primary hero-btn-primary" onClick={handleGetStarted}>Get Started</button>
+                        <button className="hero-btn-ghost" onClick={handleHowItWorks}>How It Works</button>
                     </div>
                 </div>
 
